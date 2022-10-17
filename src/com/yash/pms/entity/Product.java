@@ -11,7 +11,7 @@ public class Product {
 	private int qty;
 	private int price;
 	private LocalDate manifactureDate;
-	private short isProductDeleted;
+	
 	
 	public Product()
 	{
@@ -28,7 +28,7 @@ public class Product {
 		this.qty = qty;
 		this.price = price;
 		this.manifactureDate = manifactureDate;
-		this.isProductDeleted = isProductDeleted;
+		
 	}
 
 
@@ -86,14 +86,5 @@ public class Product {
 		this.manifactureDate = manifactureDate;
 	}
 
-	public short getIsProductDeleted() {
-		return isProductDeleted;
-	}
-
-	public void setIsProductDeleted(short isProductDeleted) {
-		this.isProductDeleted = isProductDeleted;
-	}
 	
-	
-
 }

@@ -3,6 +3,8 @@ package com.yash.pms.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 
 import com.yash.pms.entity.Product;
 
@@ -12,9 +14,9 @@ public interface ProductManager {
 
 	public void getAllProducts();
 
-	public int getProductByName(String productName);
+	public int getProductIdByName(String productName);
 
-	public boolean updateProductsName(int productId, String item);
+	public boolean updateProductName(int productId, String item);
 
 	public boolean updateProductsLocation(int productId, String item);
 
@@ -24,9 +26,11 @@ public interface ProductManager {
 	
 	public boolean updateProductManifactreDate(int productId, LocalDate item);
 
-	public boolean DeleteProduct(int productId);
+	public boolean DeleteProduct(String productName);
 	
-	public boolean isProductListEmpty(LinkedList<Product> productList);
+	//public boolean isProductListEmpty(LinkedList<Product> productList);
 	
-	public boolean isProductAlreadyExists(LinkedList<Product> productList, String productName);
+	//public boolean isProductAlreadyExists(LinkedList<Product> productList, String productName);
+
+	public boolean isProductListEmpty(Map<Integer, Product> productList);
 }

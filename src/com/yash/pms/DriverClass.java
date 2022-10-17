@@ -52,7 +52,7 @@ public class DriverClass extends utilities {
 			case 2:
 				System.out.println("To update any things of the product enter the product name : ");
 				String productNameToUpdate = input.next();
-				if(controller.isProductExists(productList, productNameToUpdate))
+				if(true)//(controller.isProductExists(productMap, productNameToUpdate))
 				{
 					System.out.println("What do you want to update");
 					System.out.println("1.Name");
@@ -106,6 +106,11 @@ public class DriverClass extends utilities {
 				break;
 			case 4:
 				controller.getAllProducts();
+				break;
+			case 5:
+				System.out.println("Enter product Name to search : ");
+				String productNameToSearch = input.next();
+				controller.getProductIdByName(productNameToSearch);
 				break;
 			default:
 				System.out.println(" You entered incorrect choice.");

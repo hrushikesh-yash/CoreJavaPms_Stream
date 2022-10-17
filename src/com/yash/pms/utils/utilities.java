@@ -13,7 +13,7 @@ public class utilities {
 	public static int productId=1;
 	public static Scanner input= new Scanner(System.in);
 	
-	protected static Map<Integer,Product> productList= new HashMap<Integer,Product>();
+	protected static Map<Integer,Product> productMap= new HashMap<Integer,Product>();
 	protected static String dateFormat = "dd/MM/yyyy";
 	
 	

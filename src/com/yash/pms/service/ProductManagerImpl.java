@@ -1,9 +1,9 @@
 package com.yash.pms.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.yash.pms.entity.Product;
 import com.yash.pms.utils.utilities;
@@ -13,11 +13,11 @@ public class ProductManagerImpl extends utilities implements ProductManager {
 	@Override
 	public boolean addProduct(Product products) {
 
-		if (isProductListEmpty(productList)) {
-			productList.add(products);
+		if (isProductListEmpty(productMap)) {
+			productMap.put(products.getProductId(), products);
 			return true;
-		} else if (!isProductAlreadyExists(productList, products.getProductName())) {
-			productList.add(products);
+		} else if (!isProductAlreadyExists(productMap, products.getProductName())) {
+			productMap.put(products.getProductId(), products);
 			return true;
 		}
 
@@ -25,73 +25,33 @@ public class ProductManagerImpl extends utilities implements ProductManager {
 	}
 
 	@Override
-	public void getAllProducts() {
-		System.out.println(
-				"Product Id | Product Name | product Location |Product Quantity | Product Price | Product Is Deleted ");
-		for (int i = 0; i < productList.size(); i++) {
-			if (productList.get(i).getIsProductDeleted() == 0) {
-				System.out.println(productList.get(i).getProductId() + " | " + productList.get(i).getProductName()
-						+ " | " + productList.get(i).getStorageLocation() + " | " + productList.get(i).getQty() + " | "
-						+ productList.get(i).getPrice()+" | "+productList.get(i).getManifactureDate() + " | " + productList.get(i).getIsProductDeleted());
-			}
-
-		}
-		System.out.println();
-
-	}
-
-	@Override
-	public int getProductByName(String productName) {
-
-		for (int i = 0; i < productList.size(); i++) {
-			if (productList.get(i).getProductName().equalsIgnoreCase(productName)) {
-				 System.out.println(" Checking :: "+productList.get(i).getProductName()+" With: "+productName);
-				return productList.get(i).getProductId();
-			}
-		}
-
-		return 0;
-	}
-
-	@Override
-	public boolean DeleteProduct(int productId) {
-		if (!isProductListEmpty(productList)) {
-			for (int i = 0; i < productList.size(); i++) {
-				if (productList.get(i).getProductId() == productId) {
-					System.out.println("Deleting Product name : "+productList.get(i).getProductName());
-					System.out.println("Deleting Product Name : "+productList.get(i).getProductId());
-					productList.remove(productList.get(i));
+	public boolean updateProductName(int productId, String item) {
+		if (!isProductListEmpty(productMap)) {
+			{
+				Product p = productMap.get(productId);
+				p.setProductName(item);
+				if (!(productMap.replace(productId, p).equals(null))) {
 					return true;
 				}
 			}
+
+			return false;
 		}
 		return false;
-
-	}
-
-	@Override
-	public boolean updateProductsName(int productId, String item) {
-		if (!isProductListEmpty(productList)) {
-			for (int i = 0; i < productList.size(); i++) {
-				if (productList.get(i).getProductId() == productId) {
-					productList.get(i).setProductName(item);
-					return true;
-				}
-			}
-		}
-
-		return false;
-
 	}
 
 	@Override
 	public boolean updateProductsLocation(int productId, String item) {
-		if (!isProductListEmpty(productList)) {
-			for (int i = 0; i < productList.size(); i++) {
-				if (productList.get(i).getProductId() == productId) {
-					productList.get(i).setStorageLocation(item);
+		if (!isProductListEmpty(productMap)) {
+			{
+				Product p = productMap.get(productId);
+				p.setStorageLocation(item);
+				if (!(productMap.replace(productId, p).equals(null))) {
+					return true;
 				}
 			}
+
+			return false;
 		}
 		return false;
 
@@ -99,13 +59,16 @@ public class ProductManagerImpl extends utilities implements ProductManager {
 
 	@Override
 	public boolean updateProductQty(int productId, int item) {
-		if (!isProductListEmpty(productList)) {
-			for (int i = 0; i < productList.size(); i++) {
-				if (productList.get(i).getProductId() == productId) {
-					productList.get(i).setQty(item);
+		if (!isProductListEmpty(productMap)) {
+			{
+				Product p = productMap.get(productId);
+				p.setQty(item);
+				if (!(productMap.replace(productId, p).equals(null))) {
 					return true;
 				}
 			}
+
+			return false;
 		}
 		return false;
 
@@ -113,33 +76,70 @@ public class ProductManagerImpl extends utilities implements ProductManager {
 
 	@Override
 	public boolean updateProductPrice(int productId, int item) {
-		if (!isProductListEmpty(productList)) {
-			for (int i = 0; i < productList.size(); i++) {
-				if (productList.get(i).getProductId() == productId) {
-					productList.get(i).setPrice(item);
+		if (!isProductListEmpty(productMap)) {
+			{
+				Product p = productMap.get(productId);
+				p.setPrice(item);
+				if (!(productMap.replace(productId, p).equals(null))) {
 					return true;
 				}
 			}
+
+			return false;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean updateProductManifactreDate(int productId, LocalDate item) {
-		if (!isProductListEmpty(productList)) {
-			for (int i = 0; i < productList.size(); i++) {
-				if (productList.get(i).getProductId() == productId) {
-					productList.get(i).setManifactureDate(item);
+		if (!isProductListEmpty(productMap)) {
+			{
+				Product p = productMap.get(productId);
+				p.setManifactureDate(item);
+				if (!(productMap.replace(productId, p).equals(null))) {
 					return true;
 				}
 			}
+
+			return false;
 		}
 		return false;
 
 	}
 
 	@Override
-	public boolean isProductListEmpty(LinkedList<Product> productList) {
+	public void getAllProducts() {
+		System.out.println("Product Id | Product Name | product Location |Product Quantity | Product Price |");
+		productMap.forEach((key, values) -> System.out
+				.println(key + " " + values.getProductName() + " " + values.getStorageLocation() + " " + values.getQty()
+						+ " " + values.getPrice() + " " + values.getManifactureDate()));
+		System.out.println();
+
+	}
+
+	@Override
+	public int getProductIdByName(String productName) {
+
+		List<Integer> productId = productMap.entrySet().stream()
+				.filter(map -> map.getValue().getProductName().equals(productName)).map(Map.Entry::getKey)
+				.collect(Collectors.toList());
+		System.out.println("Returning :: " + productId.get(0));
+		return productId.get(0);
+	}
+
+	@Override
+	public boolean DeleteProduct(String productName) {
+		if (!isProductListEmpty(productMap)) {
+			productMap.remove(getProductIdByName(productName));
+			return true;
+
+		}
+		return false;
+
+	}
+
+	@Override
+	public boolean isProductListEmpty(Map<Integer, Product> productList) {
 
 		if (productList.isEmpty()) {
 			return true;
@@ -148,16 +148,11 @@ public class ProductManagerImpl extends utilities implements ProductManager {
 
 	}
 
-	public boolean isProductAlreadyExists(LinkedList<Product> productList, String productName) {
-		if (!isProductListEmpty(productList)) {
-			for (int i = 0; i < productList.size(); i++) {
-				if (productList.get(i).getProductName().contains(productName)) {
-					return true;
-				}
-			}
+	public boolean isProductAlreadyExists(Map<Integer, Product> productMap, String productName) {
+		if (!isProductListEmpty(productMap)) {
+			return productMap.values().stream().anyMatch(value -> value.getProductName().equals(productName));
 		}
 
 		return false;
 	}
-
 }
